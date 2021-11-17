@@ -3,32 +3,46 @@ const router = express.Router(); //need to export
 const User = require("../models/User");
 const { body, validationResult } = require("express-validator");
 
-//create a User using: Post "/api/auth". Doesn't require auth
+//create a User using: Post "/api/auth/createuser". Doesn't require login
 router.post(
-  "/",
+  "/createuser",
   [
-    body("name", "Name Must be at least ").isLength({ min: 6 }),
+    body("username", "Name Must be at least 7 ").isLength({ min: 6 }),
     body("email", "Enter a valid email").isEmail(),
     body("password", "Password must be at least ").isLength({ min: 8 }),
   ],
 
-  (req, res) => {
+  async (req, res) => {
+    // if there are error, return Bad request and the errors
     const errors = validationResult(req);
-    // console.log(errors);
     if (!errors.isEmpty()) {
-      // console.log(errors)
+      console.log();
       return res.status(400).json({ errors: errors.array() });
     }
-  
 
-    User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    }).then(user => res.json(user)).catch(err=>{ console.log(`Error ${err}`)
-      res.json({Error :"please Enter unique value of Email", message: err.message})}).finally(console.log("submit successfully"))
-    
-    } 
+    try {
+      //check whether the user with this email exists already
+      let user = await User.findOne({ email: req.body.email });
+      // console.log(user);//this show null if user email not in database
+      
+      if (user) {
+        return res
+          .status(400)
+          .json({ error: "Sorry, User already exist with this email " });
+      }
+
+      //getting inforation from body
+      await User.create({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+      });
+      res.json("submit succesfully");
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send("some error occur")
+    }
+  }
 );
 
 module.exports = router;

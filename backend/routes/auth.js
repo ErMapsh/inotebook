@@ -4,7 +4,9 @@ const User = require("../models/User"); //need a model of user to create user
 const { body, validationResult } = require("express-validator"); //express-validater to validate body info is in specific format like name length.
 const bcrypt = require("bcryptjs"); //hashing alogirithm (password+salt)
 var jwt = require("jsonwebtoken"); //for authentication
-const JWT_SECRET_KEY = "ermapshisagoodb%oy$ermapshisagoodb%oy$"; //secret key
+const fetchuserid = require('../middleware/fetchuserid');
+// const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+const JWT_SECRET_KEY = "ermapshisagoodb%oy$ermapshisagoodb%oy$"
 
 //Route1: create a User using: Post "/api/auth/createuser". Doesn't require login
 router.post(
@@ -33,7 +35,7 @@ router.post(
           .json({ error: "Sorry, User already exist with this email " });
       }
 
-      const salt = await bcrypt.genSaltSync(10); //generating salt
+      const salt = await bcrypt.genSalt(10); //generating salt
       const securePass = await bcrypt.hash(req.body.password, salt); //use hash function
 
       //creating a new user
@@ -45,10 +47,10 @@ router.post(
 
       //JWT for after login we dont need to login everytime except logout
       const payload = { user: { id: userinfo.id } };
-      const authtoken = await jwt.sign(payload, JWT_SECRET_KEY);
+      const authtoken = jwt.sign(payload, JWT_SECRET_KEY);
       // console.log(authtoken);
       res.json({
-        "this authtoken is generated first time while registering ": authtoken,
+        "this authtoken is generated first time while registering ": authtoken, "Registration": "Successfull"
       });
       // res.json("submit succesfully");// res.json(userinfo);
     } catch (error) {
@@ -57,6 +59,10 @@ router.post(
     }
   }
 );
+
+
+
+
 
 //Route2: Authenticate user after creating account, "POST": "/api/auth/login". Doesn't require login
 router.post(
@@ -75,31 +81,22 @@ router.post(
     const { email, password } = req.body; //getting  information of user from document.body
     try {
       let userinfo = await User.findOne({ email }); //finding user already register with this email or not
+
       if (!userinfo) {
-        return res
-          .status(400)
-          .json({ error: "Please try to login with correct credentials" }); //if user not register then this response will see
+        return res.status(400).json({ error: "Please try to login with correct credentials" }); //if user not register then this response will see
       } else {
-        // Comparing password means our password is c
-        const passwordCompare = await bcrypt.compare(
-          password,
-          userinfo.password
-        );
-        // console.log(passwordCompare)
+
+        // Comparing password (here run hash function of user typed plaintext as password  and generate hash)(this hash and dababase hash is compared if is equal then return true)
+        const passwordCompare = await bcrypt.compare(password, userinfo.password);//return  true if both hash are same and vice-versa
         if (!passwordCompare) {
-          return res
-            .status(400)
-            .json({ error: "Please try to login with correct credentials" });
+          return res.status(400).json({ error: "Please try to login with correct credentials" });
         }
 
+        //sending data to sign 
         const payload = { user: { id: userinfo.id } };
-        const authtoken = await jwt.sign(payload, JWT_SECRET_KEY);
-        res.json({
-          "this authtoken is generated first time while registering ":
-            authtoken,
-        });
+        const authtoken = await jwt.sign(payload, JWT_SECRET_KEY);//save as cookie in user system and everytime dont need to login except logout;
+        res.json({ "this authtoken is generated while login and save as in cookie ": authtoken, "username": userinfo.username, "Login": "Successfull" });
       }
-
       console.log("login succesfull");
     } catch (error) {
       console.log(error.message);
@@ -108,15 +105,20 @@ router.post(
   }
 );
 
-// Route3: Get uesrdetails user details using : POST '/api/auth/getuser. login required
-module.exports = router;
-router.post(
-  "/getuser",
-  // try{
 
-  // }catch{
-  //   console.log(error.message);
-  //   res.status(500).send("Internal Server Error Occur");
-  //   }
-  // }
-)
+
+
+
+// Route3: Get uesr-details from user site, using : POST '/api/auth/getuser. login required
+router.post("/getuser", fetchuserid, async (next, res, req)=> {
+  userId = req.user;
+    try {
+      const user = await User.findById(userId).select("-password");//here want all info of user except password 
+      res.send(user)
+    } catch (error){
+      res.status(500).send("Internal Server Error Occur");
+      console.log(error)
+    }
+  });
+
+module.exports = router;

@@ -113,8 +113,9 @@ router.post(
 router.post("/getuser", fetchuserid, async (req, res) => {
 
   try {
-    console.log(`userid in auth: ${req.user}`)
-    const user = await User.findById(req.user).select("-password");//here want all info of user except password 
+    userid=req.user.id
+    console.log(`userid in auth: ${userid}`)
+    const user = await User.findById(userid).select("-password");//here want all info of user except password 
     // console.log(user)
     res.send({ "user": user })
 

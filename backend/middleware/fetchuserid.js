@@ -12,7 +12,7 @@ function fetchuserid(req, res, next){
 
     try {
         const data = jwt.verify(token, JWT_SECRET_KEY);//verify token and our secret key and separate data of user
-        req.user = data.user.id;
+        req.user = data.user;
         // console.log({"userid in fetchuser" : req.user})//{ user: { id: '6195dfb813cf7fdf42afbf3e' }, iat: 1637248001 }
         next();//next function will be execute after this function
         // req.user;//{ id: '6195dfb813cf7fdf42afbf3e' }

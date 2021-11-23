@@ -14,3 +14,4 @@
 - #bcrypts module: having function like genSaltSync for generating salt value and for hashing hash function
 - and this hash value will be passed to password of user while creating new user.
 - jwt is nothing but after login automatically login that account, that we login in previously. that all things in json web token(npm i jsonwebtoken)
+- when we making middleware that time that middleware get 3 parameter - (req, res, next).  middleware  execution is complete after that we write execute next(). actually next function chalu karo aisa kahata hai.

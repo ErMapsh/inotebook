@@ -110,15 +110,18 @@ router.post(
 
 
 // Route3: Get uesr-details from user site, using : POST '/api/auth/getuser. login required
-router.post("/getuser", fetchuserid, async (next, res, req)=> {
-  userId = req.user;
-    try {
-      const user = await User.findById(userId).select("-password");//here want all info of user except password 
-      res.send(user)
-    } catch (error){
-      res.status(500).send("Internal Server Error Occur");
-      console.log(error)
-    }
-  });
+router.post("/getuser", fetchuserid, async (req, res) => {
+
+  try {
+    console.log(`userid in auth: ${req.user}`)
+    const user = await User.findById(req.user).select("-password");//here want all info of user except password 
+    // console.log(user)
+    res.send({ "user": user })
+
+  } catch (error) {
+    console.log(`${error}:Internal Server Error Occur`)
+    res.status(500).send({ error: "Internal Server Error Occur" })
+  }
+});
 
 module.exports = router;

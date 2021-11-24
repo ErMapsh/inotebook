@@ -27,7 +27,7 @@ router.post("/addnote", fetchuserid, [
         try {
             const note = new Note({ title, description, tag, user: req.user.id })
             const savenote = await note.save();
-            res.status(200).json({ note: "successfully submitted", data: savenote});
+            res.status(200).json({ note: "successfully submitted", data: savenote });
             // res.status(200).json({savenote});
 
         } catch {
@@ -35,6 +35,33 @@ router.post("/addnote", fetchuserid, [
         }
     });
 
+// Route3: Update an existing note : Put '/api/notes/updatenote. login required
+router.put("/updatenote/:id", fetchuserid, async (req, res) => {
+    // here :id is noteid
+    const { title, description, tag } = req.body;//destructering!we getting title , descri and tag from body
 
+    const newNote = {}//for new note
+    if (title) { newNote.title = title };
+    if (description) { newNote.description = description };
+    if (tag) { newNote.tag = tag };
 
+    try{
+        const oldnotebyid = await Note.findById(req.params.id);//need to verify user by noteid and see is that user
+        // console.log(oldnotebyid)
+
+        if(!oldnotebyid){return res.status(401).send("Not Allowed");}//if user note not available 
+        if(oldnotebyid.user.toString() !== req.user.id){//if note user and req apend user not equal
+            return res.status(401).send("Not Allowed");//we dont give permission to update
+        }
+
+        // if above all if statement return false then user is right person
+        let note = await Note.findByIdAndUpdate(req.params.id, {$set: newNote}, {new: true});
+        res.json({note})
+    }
+    catch(error){
+        res.status(500).json({error : "Internal Server Error Occur Or Unsuccessfull"});
+    }
+}
+
+)
 module.exports = router;

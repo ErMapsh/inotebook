@@ -19,7 +19,6 @@ function fetchuserid(req, res, next){
     }
     catch(error){
         res.status(401).json({ error: "Please Authenticate Using a Valid Token" });
-        console.log("Please Authenticate Using a Valid Token")
     }
 
 }

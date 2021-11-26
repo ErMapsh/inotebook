@@ -1,12 +1,18 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+import React, {useEffect} from 'react';
+import { Link, useLocation } from "react-router-dom";
 
 
 export default function Navbar(props) {
+    let location = useLocation();
+    useEffect(() => {
+        // console.log(location.pathname)
+        // eslint-disable-next-line
+    }, [location]);
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div className="container-fluid">
+                <div className="container-fluid">v
                     <Link className="navbar-brand" to="/">iNotebook</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
@@ -15,12 +21,12 @@ export default function Navbar(props) {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to="/">Home</Link>
+                                <Link className={`nav-link ${location.pathname === "/"?"active":""}`} aria-current="page" to="/">Home</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/about">About</Link>
+                                <Link className={`nav-link ${location.pathname === "/about"?"active":""}`} to="/about">About</Link>
                             </li>
-                    
+
                         </ul>
                     </div>
                 </div>

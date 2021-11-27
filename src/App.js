@@ -15,7 +15,7 @@ function App() {
         <Router>
           <Navbar />
           <Alert />
-          <div className="container">
+          <div className="container my-3">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route exact path="/about" element={<About />} />

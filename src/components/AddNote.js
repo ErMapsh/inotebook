@@ -28,7 +28,7 @@ export default function AddNote() {
                     <input type="text" className="form-control" id="description" name="description" onChange={onChange}/>
                 </div>
             </form>
-            <button type="submit" className="btn btn-primary" onClick={handleonsubmit}>Submit</button>
+            <button type="submit" className="btn btn-primary" onClick={handleonsubmit}>Add Note</button>
             <h2>Your Notes</h2>
         </div>
     )

@@ -10,7 +10,7 @@ export default function AddNote() {
         addNote(noteinfo.title, noteinfo.description, noteinfo.tag)
     }
     const onChange=(event)=>{
-        console.log("onchange function")
+        // console.log("onchange function")
         event.preventDefault();
         setnoteinfo({...noteinfo, [event.target.name]: event.target.value })//here ...note is jo value note ke hai vo rahane de na aur jo change hoga means when event occur on that thing tabh value  assign kr dena us thing ko means title name ka event occur huva hai to {title: jo event occur ho raha hai vo}
     }

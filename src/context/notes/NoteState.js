@@ -18,10 +18,13 @@ const NoteState = (props) => {
             },
         });
         const json = await response.json();
+        // console.log(json)
         setNotes(json.usernotes)
     }
 
-    //Add a Note
+
+
+    //Add a Note : we need to just add note in database after that getnotes automatically render new notes
     const addNote = async (title, description, tag) => {
         //Api call 
         const response = await fetch(`${host}/api/notes/addnote`, {
@@ -30,38 +33,50 @@ const NoteState = (props) => {
                 'Content-Type': 'application/json',
                 'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
             },
-            body: JSON.stringify({ title, description, tag })
+            body: JSON.stringify({ title, description, tag })//convert js to json
         });
-        const json = response.json();
-        console.log(json)
+        const json = await response.json();//here is response that will show u addnote info
+        // console.log(json.data._id)
 
         let note = {
-            "_id": "619d3242994c2b44024021bacf15e2",
-            "user": "619cf7f3e0cbd3041f869d6a",
+            "_id": json.data._id,
+            "user": json.data.user,
             "title": title,
             "description": description,
-            "tag": "personal",
+            "tag": tag,
             "date": "2021-11-24T01:45:48.020Z",
             "__v": 0
         };//after api call is done
 
-        setNotes(notes.concat(note));
+        setNotes(notes.concat(note))
         console.log("adding a note")
     }
 
-    //Delete a Note
-    const delNote = async (id) => {
-        console.log(`delecting a note with ${id}`)
-        let newnotes = notes.filter((note) => { return note._id !== id })
-        setNotes(newnotes)
+
+
+    //Delete a Note 
+    const delNote = async (noteid) => {
+        console.log(`delecting a note with ${noteid}`)
+        //Api call 
+        const response = await fetch(`${host}/api/notes/deletenote/${noteid}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
+            },
+        });
+        console.log(response)
+        getNotes()
     }
 
+
+
     //Update or Edit a Note
-    const upNote = async (id, title, description, tag) => {
+    const upNote = async (noteid, title, description, tag) => {
         /* eslint-disable */
         console.log("Updating/Editing on");
         //Api call 
-        const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+        const response = await fetch(`${host}/api/notes/updatenote/${noteid}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

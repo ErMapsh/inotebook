@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 
 export default function Navbar(props) {
-    let location = useLocation();
+    let location = useLocation();//he throw current endpoint 
     useEffect(() => {
         // console.log(location.pathname)
         // eslint-disable-next-line

@@ -98,7 +98,11 @@ this all things wrapped in a try block if any error occurs in try block then cat
 
 # 😀Creating routes for Notes:
 ### 1.fetch all notes form database "GET": "'/api/notes/fetchallnotes" login required
+<<<<<<< HEAD
 - we need user data stored in a database as a note, using the get Method we can get data.
+=======
+- we need user data stored in a database as a note, using the get function we can get data.
+>>>>>>> c5baf97a1c0531541bf21f77ce5654a45f025d7a
 - firstly using middleware we again verify this is the correct user is logged in, after that, we use req.user.id find a note/notes in the database.
 - and send a res as notes that we find using MongoDB query.
 

@@ -25,6 +25,7 @@ router.post("/addnote", fetchuserid, [
             return res.status(400).json({ errors: errors.array() });
         }
 
+
         const { title, description, tag } = req.body;
         try {
             const note = new Note({ title, description, tag, user: req.user.id })
@@ -39,31 +40,35 @@ router.post("/addnote", fetchuserid, [
 
 
 // Route3: Update an existing note : Put '/api/notes/updatenote. login required
-router.put("/updatenote/:id", fetchuserid, async (req, res) => {
-    // here :id is noteid
-    const { title, description, tag } = req.body;//destructering! we getting title , descri and tag from body
+router.put("/updatenote/:id", fetchuserid,
+    [body("title", "title Must be at least 3 ").isLength({ min: 3 }), 
+     body("description", "description Must be at least 7").isLength({ min: 7 })],
 
-    const newNote = {}//for new note
-    if (title) { newNote.title = title };
-    if (description) { newNote.description = description };
-    if (tag) { newNote.tag = tag };
+    async (req, res) => {
+        // here :id is noteid
+        const { title, description, tag } = req.body;//destructering! we getting title , descri and tag from body
 
-    try {
-        const oldnotebyid = await Note.findById(req.params.id);//need to verify user by noteid and see is that user
-        // console.log(oldnotebyid)
-        if (!oldnotebyid) { return res.status(401).send("Not Allowed"); }//if user note not available 
-        if (oldnotebyid.user.toString() !== req.user.id) {//if note user and req apend user not equal
-            return res.status(401).send("Not Allowed");//we dont give permission to update
+        const newNote = {}//for new note
+        if (title) { newNote.title = title };
+        if (description) { newNote.description = description };
+        if (tag) { newNote.tag = tag };
+
+        try {
+            const oldnotebyid = await Note.findById(req.params.id);//need to verify user by noteid and see is that user
+            // console.log(oldnotebyid)
+            if (!oldnotebyid) { return res.status(401).send("Not Allowed"); }//if user note not available 
+            if (oldnotebyid.user.toString() !== req.user.id) {//if note user and req apend user not equal
+                return res.status(401).send("Not Allowed");//we dont give permission to update
+            }
+
+            // if above all if statement return false then user is right person
+            let note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
+            res.json({ note })
         }
-
-        // if above all if statement return false then user is right person
-        let note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
-        res.json({ note })
+        catch (error) {
+            res.status(500).json({ error: "Internal Server Error Occur Or Unsuccessfull" });
+        }
     }
-    catch (error) {
-        res.status(500).json({ error: "Internal Server Error Occur Or Unsuccessfull" });
-    }
-}
 
 )
 
@@ -82,7 +87,7 @@ router.delete("/deletenote/:id", fetchuserid, async (req, res) => {
         //if above if statement false then we give permission to delete it
 
         delnote = await Note.findByIdAndDelete(req.params.id);
-        res.json({"Success": "Note has been deleted", note: delnote})
+        res.json({ "Success": "Note has been deleted", note: delnote })
 
     }
     catch {

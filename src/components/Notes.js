@@ -13,8 +13,6 @@ export default function Notes() {
         // eslint-disable-next-line
     }, [])
 
-
-
     //refering
     const ref = useRef(null);//we assign ref to specific thing
     const EditNote = (curentnote) => {
@@ -24,6 +22,7 @@ export default function Notes() {
     return (
         <>
             <AddNote />
+
             {/*Button trigger modal*/}
             <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
@@ -53,7 +52,7 @@ export default function Notes() {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="description" className="form-label">Tag</label>
-                                    <input type="text" className="form-control" id="Etag" name="Etag"  />
+                                    <input type="text" className="form-control" id="Etag" name="Etag" />
                                 </div>
                             </form>
                         </div>
@@ -66,7 +65,7 @@ export default function Notes() {
             </div>
             <div className="row my-3">
                 {notes.map((note) => {
-                    return <NoteItem key={note._id} UpdateNote={EditNote} note={note} />
+                    return <NoteItem key={note._id} note={note} />
                 })}
             </div>
         </>

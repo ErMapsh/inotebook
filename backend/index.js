@@ -7,7 +7,7 @@ app.use(cors())
 
 connectToMongo();
 
-//normal routing we writing but we need net program
+//normal routing we writing but we need neat program
 app.get('/', (req, res) => {
   res.send('Hello ErMapsh!');
 })

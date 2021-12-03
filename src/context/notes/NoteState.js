@@ -10,6 +10,7 @@ const NoteState = (props) => {
 
     //gets all notes
     const getNotes = async ()=>{
+        //api call in backend
         const response = await fetch(`${host}/api/notes/fetchallnotes/`, {
             method: 'GET',
             headers: {
@@ -22,11 +23,10 @@ const NoteState = (props) => {
         setNotes(json.usernotes)
     }
 
-
-
     //Add a Note : we need to just add note in database after that getnotes automatically render new notes
     const addNote = async (title, description, tag) => {
-        //Api call 
+        //Api call at backend
+        
         const response = await fetch(`${host}/api/notes/addnote`, {
             method: 'POST',
             headers: {

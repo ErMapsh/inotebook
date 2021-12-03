@@ -17,8 +17,9 @@ router.get("/fetchallnotes", fetchuserid, async (req, res) => {
 // Route2: Adding a new notes, using : Post '/api/notes/addnote. login required
 router.post("/addnote", fetchuserid, [
     body("title", "title Must be at least 3 ").isLength({ min: 3 }),
-    body("description", "description Must be at least 9").isLength({ min: 9 })],
+    body("description", "description Must be at least 7").isLength({ min: 7 })],
     async (req, res) => {
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -36,10 +37,11 @@ router.post("/addnote", fetchuserid, [
         }
     });
 
+
 // Route3: Update an existing note : Put '/api/notes/updatenote. login required
 router.put("/updatenote/:id", fetchuserid, async (req, res) => {
     // here :id is noteid
-    const { title, description, tag } = req.body;//destructering!we getting title , descri and tag from body
+    const { title, description, tag } = req.body;//destructering! we getting title , descri and tag from body
 
     const newNote = {}//for new note
     if (title) { newNote.title = title };
@@ -49,7 +51,6 @@ router.put("/updatenote/:id", fetchuserid, async (req, res) => {
     try {
         const oldnotebyid = await Note.findById(req.params.id);//need to verify user by noteid and see is that user
         // console.log(oldnotebyid)
-
         if (!oldnotebyid) { return res.status(401).send("Not Allowed"); }//if user note not available 
         if (oldnotebyid.user.toString() !== req.user.id) {//if note user and req apend user not equal
             return res.status(401).send("Not Allowed");//we dont give permission to update
@@ -65,8 +66,6 @@ router.put("/updatenote/:id", fetchuserid, async (req, res) => {
 }
 
 )
-
-
 
 //Router4 Delete existing node using DELETE "api/notes/deletenote" login required
 router.delete("/deletenote/:id", fetchuserid, async (req, res) => {

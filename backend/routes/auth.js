@@ -60,24 +60,20 @@ router.post(
   }
 );
 
-
-
-
-
 //Route2: Authenticate user after creating account, "POST": "/api/auth/login". Doesn't require login
 router.post(
   "/loginuser",
   [
     body("email", "Enter a valid email").isEmail(),
-    body("password", "Password cannot be blacnk ").exists(),
+    body("password", "Password cannot be blank ").exists(),
   ],
-
+  
   async (req, res) => {
     const errors = validationResult(req); // if there are error, return Bad request and the errors
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
+    
     const { email, password } = req.body; //getting  information of user from document.body
     try {
       let userinfo = await User.findOne({ email }); //finding user already register with this email or not
@@ -104,10 +100,6 @@ router.post(
     }
   }
 );
-
-
-
-
 
 // Route3: Get uesr-details from user site, using : POST '/api/auth/getuser. login required
 router.post("/getuser", fetchuserid, async (req, res) => {

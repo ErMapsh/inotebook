@@ -2,9 +2,9 @@ import React, { useContext } from 'react'
 import NoteContext from '../context/notes/NoteContext';
 
 export default function NoteItem(props) {
-    const { note, UpdateNote } = props;
+    const {note} = props;
     const context = useContext(NoteContext);
-    const {delNote} = context;
+    const {delNote, upNote} = context;
     return (
         <>
         <div className="col-md-3">
@@ -14,7 +14,7 @@ export default function NoteItem(props) {
                     <h5 className="card-title">{note.title}</h5>
                     <p className="card-text">{note.description}</p>
                     <i className="fas fa-trash-alt mx-1" onClick={()=>{delNote(note._id)}}></i>
-                    <i className="fas fa-edit mx-2" onClick={()=>{UpdateNote(note)}}></i>
+                    <i className="fas fa-edit mx-2"></i>
                 </div>
             </div>
         </div>

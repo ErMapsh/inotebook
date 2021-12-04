@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef} from 'react'
+import React, { useContext, useEffect, useRef, useState} from 'react'
 import NoteContext from '../context/notes/NoteContext';
 import NoteItem from './NoteItem';
 import AddNote from './AddNote';
@@ -6,19 +6,37 @@ import AddNote from './AddNote';
 
 export default function Notes() {
     const context = useContext(NoteContext);
-    const { notes, getNotes } = context;
+    const { notes, getNotes, upNote } = context;
+    const [noteinfo, setnoteinfo] = useState({id:"", Etitle:"", Edescription:"", Etag:"default"})
+
 
     useEffect(() => {
         getNotes();//this is async function that get all notes form database
         // eslint-disable-next-line
     }, [])
 
-    //refering
+
+
+    //for editing and updating a note 
     const ref = useRef(null);//we assign ref to specific thing
-    const EditNote = (curentnote) => {
-        ref.current.click();
+    const refClose = useRef(null);//we assign ref to specific thing
+
+    const editNote = (currentnote) =>{//Editing a note
+        console.log("we got note info that we want to change:",currentnote._id)//we got current editing note, using modal we can change
+        ref.current.click();//for opening a modal
+        setnoteinfo({id:currentnote._id, Etitle: currentnote.title, Edescription: currentnote.description, Etag: currentnote.tag})
     }
 
+    const onChange=(event)=>{
+        // this function will encounter while someone editing
+        setnoteinfo({...noteinfo, [event.target.name]: event.target.value })//here ...note is jo value note ke hai vo rahane de na aur jo change hoga means when event occur on that thing tabh value  assign kr dena us thing ko means title name ka event occur huva hai to {title: jo event occur ho raha hai vo}
+    }
+
+    const  UpdateNote = (e)=>{
+        console.log("Updating a note", noteinfo)
+        ref.current.click()
+        upNote(noteinfo.id, noteinfo.Etitle, noteinfo.Edescription, noteinfo.Etag)
+    }
     return (
         <>
             <AddNote />
@@ -42,30 +60,31 @@ export default function Notes() {
                             <form className="my-3">
                                 <div className="mb-3">
                                     <label htmlFor="title" className="form-label">Title</label>
-                                    <input type="text" className="form-control" id="Etitle" name="Etitle" aria-describedby="emailHelp" />
+                                    <input type="text" className="form-control" id="Etitle" name="Etitle" value={noteinfo.Etitle} aria-describedby="emailHelp" onChange={onChange} />
                                     <div id="emailHelp" className="form-text">Title must having 6 Letters</div>
                                 </div>
 
                                 <div className="mb-3">
                                     <label htmlFor="description" className="form-label">Description</label>
-                                    <input type="text" className="form-control" id="Edescription" name="Edescription" />
+                                    <input type="text" className="form-control" id="Edescription" name="Edescription" value={noteinfo.Edescription} onChange={onChange}/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="description" className="form-label">Tag</label>
-                                    <input type="text" className="form-control" id="Etag" name="Etag" />
+                                    <input type="text" className="form-control" id="Etag" name="Etag" value={noteinfo.Etag} onChange={onChange}/>
                                 </div>
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary" onClick={EditNote}>Update changes</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" ref={refClose}>Close</button>
+                            <button type="button" className="btn btn-primary" onClick={UpdateNote}>Update changes</button>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div className="row my-3">
                 {notes.map((note) => {
-                    return <NoteItem key={note._id} note={note} />
+                    return <NoteItem key={note._id} editNote={editNote} note={note} />
                 })}
             </div>
         </>

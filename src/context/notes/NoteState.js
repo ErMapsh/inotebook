@@ -7,7 +7,6 @@ const NoteState = (props) => {
     const noteinitial = []
     const [notes, setNotes] = useState(noteinitial)
     
-
     //gets all notes
     const getNotes = async ()=>{
         //api call in backend
@@ -52,8 +51,6 @@ const NoteState = (props) => {
         console.log("adding a note")
     }
 
-
-
     //Delete a Note 
     const delNote = async (noteid) => {
         console.log(`delecting a note with ${noteid}`)
@@ -69,38 +66,41 @@ const NoteState = (props) => {
         getNotes()
     }
 
-
-
     //Update or Edit a Note
     const upNote = async (noteid, title, description, tag) => {
         /* eslint-disable */
-        console.log("Updating/Editing on");
-        //Api call 
-        const response = await fetch(`${host}/api/notes/updatenote/${noteid}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
-            },
-            body: JSON.stringify({ title, description, tag })
-        });
+        try{
 
-        const json = response.json();
-        console.log(json)
-
-        //Logic for Updating Note
-        for (let index = 0; index < notes.length; index++) {
-            let element = notes[index];
-            if (element._id === id) {
-                element.title = title,
+            //Api call 
+            const response = await fetch(`${host}/api/notes/updatenote/${noteid}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
+                },
+                body: JSON.stringify({ title, description, tag })
+            });
+            
+            const json = await response.json();
+            console.log(json)
+            
+            //Logic for Updating Note
+            for (let index = 0; index < notes.length; index++) {
+                let element = notes[index];
+                if (element._id === noteid) {
+                    element.title = title,
                     element.description = description,
                     element.tag = tag
+                }
             }
+        }catch(e){
+            console.log(e)
         }
     
     }
+    
     return (
-        <NoteContext.Provider value={{ notes, addNote, delNote, upNote, getNotes, setNotes }}>
+        <NoteContext.Provider value={{ notes, setNotes, getNotes, addNote, delNote, upNote}}>
             {props.children} {/*Essentially, props.children is a special prop, automatically passed to every component */}
         </NoteContext.Provider>
     )

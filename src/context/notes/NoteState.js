@@ -81,18 +81,9 @@ const NoteState = (props) => {
                 body: JSON.stringify({ title, description, tag })
             });
             
-            const json = await response.json();
-            console.log(json)
-            
-            //Logic for Updating Note
-            for (let index = 0; index < notes.length; index++) {
-                let element = notes[index];
-                if (element._id === noteid) {
-                    element.title = title,
-                    element.description = description,
-                    element.tag = tag
-                }
-            }
+            // const json = await response.json();
+            // console.log(json)
+            getNotes()
         }catch(e){
             console.log(e)
         }

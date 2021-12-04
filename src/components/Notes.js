@@ -22,7 +22,7 @@ export default function Notes() {
     const refClose = useRef(null);//we assign ref to specific thing
 
     const editNote = (currentnote) =>{//Editing a note
-        console.log("we got note info that we want to change:",currentnote._id)//we got current editing note, using modal we can change
+        // console.log("we got note info that we want to change:",currentnote._id)//we got current editing note, using modal we can change
         ref.current.click();//for opening a modal
         setnoteinfo({id:currentnote._id, Etitle: currentnote.title, Edescription: currentnote.description, Etag: currentnote.tag})
     }
@@ -33,7 +33,7 @@ export default function Notes() {
     }
 
     const  UpdateNote = (e)=>{
-        console.log("Updating a note", noteinfo)
+        // console.log("Updating a note", noteinfo)
         ref.current.click()
         upNote(noteinfo.id, noteinfo.Etitle, noteinfo.Edescription, noteinfo.Etag)
     }

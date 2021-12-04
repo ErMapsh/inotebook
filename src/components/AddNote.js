@@ -4,12 +4,13 @@ import NoteContext from '../context/notes/NoteContext'
 export default function AddNote() {
     const context = useContext(NoteContext)
     const {addNote} = context;
-    const [noteinfo, setnoteinfo] = useState({title:"", description:"", tag:"default"})
+    const [noteinfo, setnoteinfo] = useState({title:"", description:"", tag:""})
 
     const submitNote =(e)=>{
         //this function will encounter while when user want to add a Note
         e.preventDefault();// submit button click nahi hoga, mostly this used in checkbox button
         addNote(noteinfo.title, noteinfo.description, noteinfo.tag)
+        setnoteinfo({title:"", description:"", tag:""})
     }
 
     const onChange=(event)=>{
@@ -25,19 +26,19 @@ export default function AddNote() {
             <form className="my-3">
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
-                    <input type="text" className="form-control" id="title" name="title" aria-describedby="emailHelp" onChange={onChange}/>
-                    <div id="emailHelp" className="form-text">Title must having 6 Letters</div>
+                    <input type="text" className="form-control" id="title" name="title" aria-describedby="emailHelp" value={noteinfo.title}  minLength={5} onChange={onChange} required/>
+                    <div id="emailHelp" className="form-text">Title must having 3 Letters and description must having 7 letter</div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Description</label>
-                    <input type="text" className="form-control" id="description" name="description" onChange={onChange}/>
+                    <input type="text" className="form-control" id="description" name="description" value={noteinfo.description} minLength={5} onChange={onChange} required/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Tag</label>
-                    <input type="text" className="form-control" id="tag" name="tag" onChange={onChange}/>
+                    <input type="text" className="form-control" id="tag" name="tag" value={noteinfo.tag}  minLength={5} onChange={onChange}/>
                 </div>
             </form>
-            <button type="submit" className="btn btn-primary" onClick={submitNote}>Add Note</button>
+            <button type="submit" disabled={noteinfo.title.length<3 || noteinfo.description.length<7} className="btn btn-primary" onClick={submitNote}>Add Note</button>
             
             <h2 className="m-3">Your Notes</h2>
         </div>

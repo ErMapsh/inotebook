@@ -43,12 +43,13 @@ const NoteState = (props) => {
             "title": title,
             "description": description,
             "tag": tag,
-            "date": "2021-11-24T01:45:48.020Z",
+            "date": json.data.date,
             "__v": 0
         };//after api call is done
 
         setNotes(notes.concat(note))
-        console.log("adding a note")
+        getNotes()
+        // console.log("adding a note")
     }
 
     //Delete a Note 

@@ -6,7 +6,9 @@ const NoteState = (props) => {
     const host = "http://localhost:5000";
     const noteinitial = []
     const [notes, setNotes] = useState(noteinitial)
-    
+    // const [logout, setlogout] = useState('')
+    const [alert, setalert] = useState({message: "██▓▒░ ►▬ WELCOME ▬◄ ░▒▓██", situation: ""})
+
     //gets all notes
     const getNotes = async ()=>{
         //api call in backend
@@ -25,7 +27,6 @@ const NoteState = (props) => {
     //Add a Note : we need to just add note in database after that getnotes automatically render new notes
     const addNote = async (title, description, tag) => {
         //Api call at backend
-        
         const response = await fetch(`${host}/api/notes/addnote`, {
             method: 'POST',
             headers: {
@@ -35,7 +36,7 @@ const NoteState = (props) => {
             body: JSON.stringify({ title, description, tag })//convert js to json
         });
         const json = await response.json();//here is response that will show u addnote info
-        // console.log(json.data._id)
+        console.log(json.data)
 
         let note = {
             "_id": json.data._id,
@@ -92,7 +93,7 @@ const NoteState = (props) => {
     }
     
     return (
-        <NoteContext.Provider value={{ notes, setNotes, getNotes, addNote, delNote, upNote}}>
+        <NoteContext.Provider value={{ notes, setNotes, getNotes, addNote, delNote, upNote, alert, setalert}}>
             {props.children} {/*Essentially, props.children is a special prop, automatically passed to every component */}
         </NoteContext.Provider>
     )

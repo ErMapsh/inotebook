@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext} from 'react';
 import { Link, useLocation } from "react-router-dom";
+import NoteContext from '../context/notes/NoteContext';
 
 
 export default function Navbar(props) {
@@ -9,6 +10,8 @@ export default function Navbar(props) {
         // eslint-disable-next-line
     }, [location.pathname]);
 
+    // const context = useContext(NoteContext)
+    // const {alert} = context;
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -27,6 +30,12 @@ export default function Navbar(props) {
                                 <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">About</Link>
                             </li>
                         </ul>
+                    </div>
+
+                    <div>
+                    <Link to="/login" className={`btn btn-primary mx-2 ${location.pathname === "/login" ? "active" : ""}`}>Login</Link>
+                    <Link to="/signup" className={`btn btn-primary mx-2 ${location.pathname === "/signup" ? "active" : ""}`} >Signup</Link>
+                    <Link to="/logout" className={`btn btn-primary mx-2`}>logout</Link>
                     </div>
                 </div>
             </nav>

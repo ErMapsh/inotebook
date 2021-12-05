@@ -12,9 +12,9 @@ const JWT_SECRET_KEY = "ermapshisagoodb%oy$ermapshisagoodb%oy$"
 router.post(
   "/createuser",
   [
-    body("username", "Name Must be at least 7 ").isLength({ min: 6 }),
+    body("username", "Name Must be at least 6 ").isLength({ min: 6 }),
     body("email", "Enter a valid email").isEmail(),
-    body("password", "Password must be at least ").isLength({ min: 8 }),
+    body("password", "Password must be at least 8 ").isLength({ min: 8 }),
   ],
 
   async (req, res) => {
@@ -30,9 +30,7 @@ router.post(
       // console.log(user);//this show null if user email not in database
 
       if (user) {
-        return res
-          .status(400)
-          .json({ error: "Sorry, User already exist with this email " });
+        return res.status(400).json({ success: false, error: "Sorry, User already exist with this email " });
       }
 
       const salt = await bcrypt.genSalt(10); //generating salt
@@ -50,12 +48,12 @@ router.post(
       const authtoken = jwt.sign(payload, JWT_SECRET_KEY);
       // console.log(authtoken);
       res.json({
-        "this authtoken is generated first time while registering ": authtoken, "Registration": "Successfull"
+         Success: true, authtoken: authtoken, message: "Registration Successful"
       });
       // res.json("submit succesfully");// res.json(userinfo);
     } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Internal Server Error Occur");
+      // console.log(error.message);
+      res.status(500).json({error:"Internal Server Error Occur"});
     }
   }
 );
@@ -79,21 +77,23 @@ router.post(
       let userinfo = await User.findOne({ email }); //finding user already register with this email or not
 
       if (!userinfo) {
-        return res.status(400).json({ error: "Please try to login with correct credentials" }); //if user not register then this response will see
+        return res.status(400).json({ success: false, error: "Please try to login with correct credentials" }); //if user not register then this response will see
       } else {
 
         // Comparing password (here run hash function of user typed plaintext as password  and generate hash)(this hash and dababase hash is compared if is equal then return true)
         const passwordCompare = await bcrypt.compare(password, userinfo.password);//return  true if both hash are same and vice-versa
         if (!passwordCompare) {
-          return res.status(400).json({ error: "Please try to login with correct credentials" });
+          return res.status(400).json({ success: false, error: "Please try to login with correct credentials" });
         }
 
         //sending data to sign 
         const payload = { user: { id: userinfo.id } };
         const authtoken = await jwt.sign(payload, JWT_SECRET_KEY);//save as cookie in user system and everytime dont need to login except logout;
-        res.json({ "this authtoken is generated while login and save as in cookie ": authtoken, "username": userinfo.username, "Login": "Successfull" });
+        // res.json({ "this authtoken is generated while login and save as in cookie ": authtoken, "username": userinfo.username, "Login": "Successfull" });
+        let success = true;
+        res.json({success, authtoken})
       }
-      console.log("login succesfull");
+      // console.log("login succesfull");
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Internal Server Error Occur");

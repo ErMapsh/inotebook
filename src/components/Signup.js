@@ -22,7 +22,7 @@ export default function Signup() {
         // console.log(json)
         if(json.Success === true){
             navigate("/")
-            setalert({message: json.message, situation: "Signup"})
+            setalert({message: json.message, situation: " required"})
             localStorage.setItem('auth-token', json.authtoken)
             //redireact to
         }
@@ -39,21 +39,21 @@ export default function Signup() {
             <form>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Username</label>
-                    <input type="text" className="form-control" name="username" id="username" placeholder="Enter your Username here" aria-describedby="username"  onChange={onChange}/>
+                    <input type="text" className="form-control" name="username" id="username" placeholder="Enter your Username here" aria-describedby="username"  onChange={onChange} required/>
                     <div id="username" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>
-                    <input type="email" className="form-control"  name="email" id="email" aria-describedby="emailHelp" onChange={onChange}/>
+                    <input type="email" className="form-control"  name="email" id="email" aria-describedby="emailHelp" onChange={onChange} required/>
                     <div id="email" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" name="password" id="password"  onChange={onChange}/>
+                    <input type="password" className="form-control" name="password" id="password"  onChange={onChange} required/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Confirm Password</label>
-                    <input type="password" className="form-control"  id="Cpassword" name="Cpassword"  onChange={onChange}/>
+                    <input type="password" className="form-control"  id="Cpassword" name="Cpassword"  onChange={onChange} required/>
                 </div>
                 <button type="submit" disabled={firstTimeCredential.password !== firstTimeCredential.Cpassword || firstTimeCredential.username.length<6} className="btn btn-primary" onClick={NewUserSubmit}>Submit</button>
             </form>

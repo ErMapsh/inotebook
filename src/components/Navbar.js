@@ -35,7 +35,7 @@ export default function Navbar(props) {
                     <div>
                     <Link to="/login" className={`btn btn-primary mx-2 ${location.pathname === "/login" ? "active" : ""}`}>Login</Link>
                     <Link to="/signup" className={`btn btn-primary mx-2 ${location.pathname === "/signup" ? "active" : ""}`} >Signup</Link>
-                    <Link to="/logout" className={`btn btn-primary mx-2`}>logout</Link>
+                    {/* <Link to="/logout" className={`btn btn-primary mx-2`}>logout</Link> */}
                     </div>
                 </div>
             </nav>

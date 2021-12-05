@@ -48,7 +48,7 @@ router.post(
       const authtoken = jwt.sign(payload, JWT_SECRET_KEY);
       // console.log(authtoken);
       res.json({
-         Success: true, authtoken: authtoken, message: "Registration Successful"
+         Success: true, authtoken: authtoken, message: "Registration/Signup Successful"
       });
       // res.json("submit succesfully");// res.json(userinfo);
     } catch (error) {

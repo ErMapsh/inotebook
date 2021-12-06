@@ -2,6 +2,7 @@ import React, {useState, useContext} from 'react'
 import { useNavigate } from "react-router-dom";
 import NoteContext from '../context/notes/NoteContext';
 
+
 export default function Signup() {
     const [firstTimeCredential, setfirstTimeCredential] = useState({username:"", email:"", password: ""})
     let navigate = useNavigate();
@@ -36,6 +37,7 @@ export default function Signup() {
     }
     return (
         <div>
+            <h2 className="my-2">Signup to Continue to iNotebook</h2>
             <form>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Username</label>

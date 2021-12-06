@@ -1,15 +1,18 @@
-import React, { useEffect} from 'react';
-import { Link, useLocation } from "react-router-dom";
-
-
+import React, { useEffect } from 'react';
+import { Link, useLocation, useNavigate  } from "react-router-dom";
 
 export default function Navbar(props) {
     let location = useLocation();//he throw current endpoint information
+    let navigate = useNavigate();
     useEffect(() => {
         // console.log(location.pathname)
         // eslint-disable-next-line
     }, [location.pathname]);
 
+    const Logout = ()=>{
+        localStorage.removeItem('auth-token');
+        navigate('/login')
+    }
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -31,9 +34,17 @@ export default function Navbar(props) {
                     </div>
 
                     <div>
-                    <Link to="/login" className={`btn btn-primary mx-2 ${location.pathname === "/login" ? "active" : ""}`}>Login</Link>
-                    <Link to="/signup" className={`btn btn-primary mx-2 ${location.pathname === "/signup" ? "active" : ""}`} >Signup</Link>
-                    {/* <Link to="/logout" className={`btn btn-primary mx-2`}>logout</Link> */}
+
+                        {!localStorage.getItem('auth-token')?
+                            <div>
+                                <Link to="/login" className={`btn btn-primary mx-2 ${location.pathname === "/login" ? "active" : ""}`}>Login</Link>
+                                <Link to="/signup" className={`btn btn-primary mx-2 ${location.pathname === "/signup" ? "active" : ""}`} >Signup</Link>
+                            </div>:
+                            <div>
+                                <button className={`btn btn-primary mx-2 `} onClick={Logout}>Logout</button>
+                            </div>
+
+                        }
                     </div>
                 </div>
             </nav>

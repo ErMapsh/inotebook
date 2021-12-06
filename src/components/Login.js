@@ -35,6 +35,7 @@ export default function Login() {
 
     return (
         <div>
+            <h2 className="my-2">Login to Continue to iNotebook</h2>
             <form >
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>

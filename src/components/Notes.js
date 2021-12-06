@@ -2,16 +2,21 @@ import React, { useContext, useEffect, useRef, useState} from 'react'
 import NoteContext from '../context/notes/NoteContext';
 import NoteItem from './NoteItem';
 import AddNote from './AddNote';
-
+import { useNavigate } from "react-router-dom";
 
 export default function Notes() {
     const context = useContext(NoteContext);
     const {notes, getNotes, upNote } = context;
     const [noteinfo, setnoteinfo] = useState({id:"", Etitle:"", Edescription:"", Etag:"default"})
-
+    let navigate = useNavigate();
 
     useEffect(() => {
-        getNotes();//this is async function that get all notes form database
+        if(localStorage.getItem('auth-token')){
+            getNotes();//this is async function that get all notes form database
+        }
+        else{
+            navigate('/login')
+        }
         // eslint-disable-next-line
     }, [])
 

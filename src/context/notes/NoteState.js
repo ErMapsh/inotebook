@@ -6,94 +6,118 @@ const NoteState = (props) => {
     const host = "http://localhost:5000";
     const noteinitial = []
     const [notes, setNotes] = useState(noteinitial)
-    // const [logout, setlogout] = useState('')
-    const [alert, setalert] = useState({message: "██▓▒░ ►▬ WELCOME ▬◄ ░▒▓██", situation: ""})
+    const [alert, setalert] = useState(null)
+
+    //for first later uppercase
+    const UP = (word) => {
+        return word.slice(0, 1).toUpperCase() + word.slice(1);
+    };
+    //setting alerts
+    const showAlert = (message, type) => {
+        setalert({ message: message, type: type })
+        setTimeout(() => {
+            setalert(null)
+        }, 2000)
+    }
 
     //gets all notes
-    const getNotes = async ()=>{
+    const getNotes = async () => {
         //api call in backend
         const response = await fetch(`${host}/api/notes/fetchallnotes/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
+                'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZGFhNWY1YTBmNjZhOTJmZTljMjA0In0sImlhdCI6MTYzODc3MTMwNX0.WMre97rX6DZ5zEXl8EZFk6EXNAuAZxeJH_C_ROAZ_FA"
             },
         });
         const json = await response.json();
-        // console.log(json)
         setNotes(json.usernotes)
     }
 
     //Add a Note : we need to just add note in database after that getnotes automatically render new notes
     const addNote = async (title, description, tag) => {
         //Api call at backend
-        const response = await fetch(`${host}/api/notes/addnote`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
-            },
-            body: JSON.stringify({ title, description, tag })//convert js to json
-        });
-        const json = await response.json();//here is response that will show u addnote info
-        console.log(json.data)
+        try {
 
-        let note = {
-            "_id": json.data._id,
-            "user": json.data.user,
-            "title": title,
-            "description": description,
-            "tag": tag,
-            "date": json.data.date,
-            "__v": 0
-        };//after api call is done
+            const response = await fetch(`${host}/api/notes/addnote`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZGFhNWY1YTBmNjZhOTJmZTljMjA0In0sImlhdCI6MTYzODc3MTMwNX0.WMre97rX6DZ5zEXl8EZFk6EXNAuAZxeJH_C_ROAZ_FA"
+                },
+                body: JSON.stringify({ title, description, tag })//convert js to json
+            });
+            const json = await response.json();//here is response that will show u addnote info
+            // console.log(json.data)
+            // showAlert(json.msg, "success")
 
-        setNotes(notes.concat(note))
-        getNotes()
-        // console.log("adding a note")
+            let note = {
+                "_id": json.data._id,
+                "user": json.data.user,
+                "title": title,
+                "description": description,
+                "tag": tag,
+                "date": json.data.date,
+                "__v": 0
+            };//after api call is done
+            setNotes(notes.concat(note))
+            showAlert(json.msg, "success")
+            getNotes()
+            // console.log("adding a note")
+        }
+        catch (e) {
+            showAlert("Internal Error Occur", "danger")
+        }
     }
 
     //Delete a Note 
     const delNote = async (noteid) => {
-        console.log(`delecting a note with ${noteid}`)
-        //Api call 
-        const response = await fetch(`${host}/api/notes/deletenote/${noteid}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
-            },
-        });
-        console.log(response)
-        getNotes()
+        try {
+            // console.log(`delecting a note with ${noteid}`)
+            //Api call 
+            const response = await fetch(`${host}/api/notes/deletenote/${noteid}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZGFhNWY1YTBmNjZhOTJmZTljMjA0In0sImlhdCI6MTYzODc3MTMwNX0.WMre97rX6DZ5zEXl8EZFk6EXNAuAZxeJH_C_ROAZ_FA"
+                },
+            });
+            const json = await response.json()
+            // console.log(json)
+            showAlert(json.msg, "success")
+            getNotes()
+        } catch (e) {   
+            showAlert("Internal Error Occur", "danger")
+        }
     }
 
     //Update or Edit a Note
     const upNote = async (noteid, title, description, tag) => {
         /* eslint-disable */
-        try{
+        try {
 
             //Api call 
             const response = await fetch(`${host}/api/notes/updatenote/${noteid}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhNjQ2MGJjZDczMzBhMDRiZjkzYTBmIn0sImlhdCI6MTYzODI4Njg4OH0.6Fuvtgm0mC6nqYQGQ13md_7lfL8wg613iWWlJMlqepo"
+                    'auth-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZGFhNWY1YTBmNjZhOTJmZTljMjA0In0sImlhdCI6MTYzODc3MTMwNX0.WMre97rX6DZ5zEXl8EZFk6EXNAuAZxeJH_C_ROAZ_FA"
                 },
                 body: JSON.stringify({ title, description, tag })
             });
-            
-            // const json = await response.json();
+
+            const json = await response.json();
             // console.log(json)
             getNotes()
-        }catch(e){
+            showAlert(json.msg, "success")
+        } catch (e) {
             console.log(e)
         }
-    
+
     }
-    
+
     return (
-        <NoteContext.Provider value={{ notes, setNotes, getNotes, addNote, delNote, upNote, alert, setalert}}>
+        <NoteContext.Provider value={{ notes, setNotes, getNotes, addNote, delNote, upNote, alert, showAlert, UP }}>
             {props.children} {/*Essentially, props.children is a special prop, automatically passed to every component */}
         </NoteContext.Provider>
     )

@@ -6,7 +6,7 @@ export default function Signup() {
     const [firstTimeCredential, setfirstTimeCredential] = useState({username:"", email:"", password: ""})
     let navigate = useNavigate();
     const context = useContext(NoteContext)
-    const {setalert} = context;
+    const {showAlert} = context;
  
     const NewUserSubmit = async (e)=>{
         e.preventDefault();
@@ -21,13 +21,13 @@ export default function Signup() {
         let json = await response.json()
         // console.log(json)
         if(json.Success === true){
-            navigate("/")
-            setalert({message: json.message, situation: " required"})
-            localStorage.setItem('auth-token', json.authtoken)
             //redireact to
+            navigate("/")
+            showAlert(json.message, "success")
+            localStorage.setItem('auth-token', json.authtoken)
         }
         else{
-            setalert({message: json.error})
+            showAlert(json.error, "danger")
         }
     }
 
@@ -39,7 +39,7 @@ export default function Signup() {
             <form>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Username</label>
-                    <input type="text" className="form-control" name="username" id="username" placeholder="Enter your Username here" aria-describedby="username"  onChange={onChange} required/>
+                    <input type="text" className="form-control" name="username" id="username" minLength={6} placeholder="Enter your Username here" aria-describedby="username"  onChange={onChange} required/>
                     <div id="username" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
@@ -49,13 +49,13 @@ export default function Signup() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" name="password" id="password"  onChange={onChange} required/>
+                    <input type="password" className="form-control" name="password" id="password" minLength={8} onChange={onChange} required/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Confirm Password</label>
-                    <input type="password" className="form-control"  id="Cpassword" name="Cpassword"  onChange={onChange} required/>
+                    <input type="password" className="form-control"  id="Cpassword" name="Cpassword" minLength={8} onChange={onChange} required/>
                 </div>
-                <button type="submit" disabled={firstTimeCredential.password !== firstTimeCredential.Cpassword || firstTimeCredential.username.length<6} className="btn btn-primary" onClick={NewUserSubmit}>Submit</button>
+                <button type="submit" className="btn btn-primary" onClick={NewUserSubmit}>Submit</button>
             </form>
         </div>
     )

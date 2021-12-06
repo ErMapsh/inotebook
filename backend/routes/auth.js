@@ -16,19 +16,18 @@ router.post(
     body("email", "Enter a valid email").isEmail(),
     body("password", "Password must be at least 8 ").isLength({ min: 8 }),
   ],
-
+  
   async (req, res) => {
+    try {
     // if there are error, return Bad request and the errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
       // console.log(error);
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success: false, error: "Invalid Credentials" });
     }
 
-    try {
       let user = await User.findOne({ email: req.body.email }); //check whether the user with this email exists already
       // console.log(user);//this show null if user email not in database
-
       if (user) {
         return res.status(400).json({ success: false, error: "Sorry, User already exist with this email " });
       }
@@ -53,7 +52,7 @@ router.post(
       // res.json("submit succesfully");// res.json(userinfo);
     } catch (error) {
       // console.log(error.message);
-      res.status(500).json({error:"Internal Server Error Occur"});
+      res.status(500).json({success: false, error:"Internal Server Error Occur"});
     }
   }
 );
@@ -69,7 +68,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req); // if there are error, return Bad request and the errors
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success: false, error: "invalid Credentials" });
     }
     
     const { email, password } = req.body; //getting  information of user from document.body
@@ -90,30 +89,28 @@ router.post(
         const payload = { user: { id: userinfo.id } };
         const authtoken = await jwt.sign(payload, JWT_SECRET_KEY);//save as cookie in user system and everytime dont need to login except logout;
         // res.json({ "this authtoken is generated while login and save as in cookie ": authtoken, "username": userinfo.username, "Login": "Successfull" });
-        let success = true;
-        res.json({success, authtoken})
+        res.json({success:true, authtoken})
       }
       // console.log("login succesfull");
     } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Internal Server Error Occur");
+      // console.log(error.message);
+      res.status(500).json({success: false, error:"Internal Server Error Occur"});
     }
   }
 );
 
 // Route3: Get uesr-details from user site, using : POST '/api/auth/getuser. login required
 router.post("/getuser", fetchuserid, async (req, res) => {
-
   try {
     userid = req.user.id;
     // console.log(`userid in auth: ${userid}`);
     const user = await User.findById(userid).select("-password");//here want all info of user except password 
     // console.log(user)
-    res.send({ "user": user })
+    res.json({ success: true, "user": user })
 
   } catch (error) {
-    console.log(`${error}:Internal Server Error Occur`)
-    res.status(500).send({ error: "Internal Server Error Occur" })
+    // console.log(`${error}:Internal Server Error Occur`)
+    res.status(500).send({ success:false, error: "Internal Server Error Occur" })
   }
 });
 

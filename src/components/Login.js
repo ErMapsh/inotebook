@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const [Credentials, setCredentials] = useState({email:"", password:""})
     const context = useContext(NoteContext);
-    const {setalert} = context;
+    const {showAlert} = context;
     let navigate = useNavigate();
 
     const loginSubmit = async (e)=>{
@@ -22,11 +22,11 @@ export default function Login() {
         // console.log(json)
         if(json.success === true){
             // save the authtoken in localstorage and redirect
-            setalert({message: "Successfully Login", situation: "Login"})
+            showAlert("Successfully Login", "success")
             localStorage.setItem('auth-token', json.authtoken)
             navigate("/")
         }else{
-            setalert({message: json.error})
+            showAlert(json.error,"danger")
         }
     }
     const onChange=(event)=>{

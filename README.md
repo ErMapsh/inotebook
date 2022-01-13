@@ -29,3 +29,7 @@
 
 ## Ref in hooks
 - when we want refer to specific thing in code the we refer their
+
+# Redux in reactjs
+- [https://www.youtube.com/watch?v=JZQWKYjfZlQ&list=PLu0W_9lII9agx66oZnT6IyhcMIbUMNMdt&index=73](https://www.youtube.com/watch?v=JZQWKYjfZlQ&list=PLu0W_9lII9agx66oZnT6IyhcMIbUMNMdt&index=73)
+- redux helping to manage state variable 

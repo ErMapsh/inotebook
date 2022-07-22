@@ -1,3 +1,5 @@
+- Nodemon : In linux - npm install nodemon --save-dev
+
 # Front-end inotebook
 - reactjs project 3 : inotebook
 - for web app we create a application using npx create-react-app 

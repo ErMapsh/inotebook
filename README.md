@@ -1,7 +1,7 @@
-![Homepage](/src/images/Inotebook/Notes.png)<br/>
-![Login](/src/images/Inotebook/Login.png)<br/>
-![Sign](/src/images/Inotebook//sign.png)<br/>
-![Update](/src/images/Inotebook/Update%20Notes.png)<br/>
+![Homepage](/src/images/Inotebook/Notes.png)<br/><br/>
+![Login](/src/images/Inotebook/Login.png)<br/><br/>
+![Sign](/src/images/Inotebook//sign.png)<br/><br/>
+![Update](/src/images/Inotebook/Update%20Notes.png)<br/><br/>
 
 
 - Nodemon : In linux - npm install nodemon --save-dev

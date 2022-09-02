@@ -22,10 +22,9 @@ export default function Signup() {
         let json = await response.json()
         // console.log(json)
         if(json.Success === true){
-            //redireact to
-            navigate("/")
             showAlert(json.message, "success")
-            localStorage.setItem('auth-token', json.authtoken)
+            // localStorage.setItem('auth-token', json.authtoken)
+            navigate("/login");//redireact to
         }
         else{
             showAlert(json.error, "danger")

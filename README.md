@@ -1,7 +1,7 @@
-![Homepage](/src/images/Inotebook/Notes.png)__
-![Login](/src/images/Inotebook/Login.png)__
-![Sign](/src/images/Inotebook//sign.png)__
-![Update](/src/images/Inotebook/Update%20Notes.png)__
+![Homepage](/Client/src/images/Inotebook/Notes.png)__
+![Login](/Client/src/images/Inotebook/Login.png)__
+![Sign](/Client/src/images/Inotebook//sign.png)__
+![Update](/Client/src/images/Inotebook/Update%20Notes.png)__
 
 
 - Nodemon : In linux - npm install nodemon --save-dev
